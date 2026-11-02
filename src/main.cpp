@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stb/stb_image.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -35,9 +34,14 @@ public:
         glfwSetFramebufferSizeCallback( window, framebuffer_size_callback );
     }
 
-    void clear() {
+    static void clear() {
         glClearColor( 0.1882f, 0.0392f, 0.1412f, 1.0f );
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    }
+
+    void processInput() const {
+        if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
+            glfwSetWindowShouldClose( window, GLFW_TRUE );
     }
 
 private:
@@ -45,18 +49,15 @@ private:
         glViewport( 0, 0, width, height );
     }
 
-    static void processInput( GLFWwindow* window ) {
-        if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
-            glfwSetWindowShouldClose( window, GLFW_TRUE );
-    }
 };
 
 int main() {
     const auto window = Window{ "fuckass window", 640, 480 };
 
     while ( !glfwWindowShouldClose( window.window ) ) {
-        glClearColor( 0.1882f, 0.0392f, 0.1412f, 1.0f );
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        window.processInput();
+
+        Window::clear();
 
         glfwSwapBuffers( window.window );
         glfwPollEvents();
