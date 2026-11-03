@@ -1,16 +1,19 @@
 #include "Window.h"
 
+#include <GLFW/glfw3.h>
+
 int main() {
-    const auto window = Engine::Window{ "fuckass window", 640, 480 };
+    const auto window = Engine::Window{ "C++ GLFW Window", 640, 480 };
 
     while ( !window.shouldClose() ) {
         window.processInput();
 
         Engine::Window::clear();
 
-        window.poll();
+        window.swapBuffers();
+        Engine::Window::pollEvents();
     }
-    Engine::Window::terminate();
+    glfwTerminate();
 
     return 0;
 }

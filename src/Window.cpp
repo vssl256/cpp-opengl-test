@@ -11,20 +11,30 @@ namespace Engine {
         init_();
     }
 
-    Window::~Window() = default;
+    Window::~Window() {
+        if ( window_ != nullptr ) {
+            glfwDestroyWindow( window_ );
+        }
+    }
 
     void Window::init_() {
-        glfwInit();
+        if ( !glfwInit() ) {
+            std::cerr << "Failed to initialize GLFW" << std::endl;
+            return;
+        }
+
+        createWindowHints();
 
         window_ = glfwCreateWindow( width_, height_, title_, nullptr, nullptr );
         if ( window_ == nullptr ) {
             std::cerr << "Failed to create GLFW window" << std::endl;
-            glfwTerminate();
+            return;
         }
         glfwMakeContextCurrent( window_ );
 
         if ( !gladLoadGLLoader( reinterpret_cast<GLADloadproc>( glfwGetProcAddress ) ) ) {
             std::cerr << "Failed to initialize GLAD" << std::endl;
+            return;
         }
 
         glViewport( 0, 0, width_, height_ );
@@ -50,8 +60,11 @@ namespace Engine {
         }
     }
 
-    void Window::poll() const {
+    void Window::swapBuffers() const {
         glfwSwapBuffers( window_ );
+    }
+
+    void Window::pollEvents() {
         glfwPollEvents();
     }
 
@@ -60,7 +73,9 @@ namespace Engine {
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     }
 
-    void Window::terminate() {
-        glfwTerminate();
+    void Window::createWindowHints() {
+        glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+        glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+        glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
     }
 }
