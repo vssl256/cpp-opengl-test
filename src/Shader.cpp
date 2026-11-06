@@ -11,6 +11,10 @@ namespace Engine {
         init();
     }
 
+    Shader::~Shader() {
+        glDeleteProgram( shaderProgram_ );
+    }
+
     void Shader::init() {
         compile( &vertexShader_, GL_VERTEX_SHADER, vertexShaderSource );
         compile( &fragmentShader_, GL_FRAGMENT_SHADER, fragmentShaderSource );
