@@ -27,7 +27,13 @@ add_executable(CppOpenGLTest src/main.cpp
         src/Window.cpp
         src/Window.h
         src/Shader.cpp
-        src/Shader.h )
+        src/Shader.h
+        src/Utils/File.cpp
+        src/Utils/File.h
+        src/Utils/File.cpp
+        src/Utils/File.h
+        src/Utils/FileType.h
+        src/Utils/FileExtension.h )
 
 target_link_libraries(CppOpenGLTest PRIVATE
         glad
