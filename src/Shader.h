@@ -24,6 +24,9 @@ namespace Engine {
         static void log( const unsigned int *ref, int type );
     public:
         Shader( const char *name );
+
         ~Shader();
+        Shader( const Shader& ) = delete;
+        Shader& operator=( const Shader & ) = delete;
     };
 }

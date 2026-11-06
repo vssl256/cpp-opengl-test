@@ -13,15 +13,16 @@ namespace Engine {
         static void createWindowHints();
 
     public:
-        Window( const Window & ) = delete;
-        Window &operator=( const Window & ) = delete;
         [[nodiscard]] Window( const char *title, int width, int height );
-        ~Window();
         [[nodiscard]] GLFWwindow *get() const;
         [[nodiscard]] bool shouldClose() const;
         void processInput() const;
         void swapBuffers() const;
         static void pollEvents();
         static void clear();
+
+        ~Window();
+        Window( const Window & ) = delete;
+        Window &operator=( const Window & ) = delete;
     };
 }
