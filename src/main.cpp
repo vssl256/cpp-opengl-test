@@ -10,9 +10,8 @@ using namespace Utils;
 
 int main() {
     {
-        const auto window = Engine::Window{ "C++ GLFW Window", 640, 480 };
-        const auto shader = Engine::Shader{ "a" };
-        const auto file = File{ "fuckass", FileType::shader, FileExtension::vert };
+        const Engine::Window window{ "C++ GLFW Window", 640, 480 };
+        const Engine::Shader shader{ "a" };
 
         while ( !window.shouldClose() ) {
             window.processInput();

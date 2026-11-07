@@ -18,10 +18,13 @@ namespace Engine {
     "{\n"
     "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}\n\0"};
-        void init();
-        void link();
-        static void compile( unsigned int *shader, int type, const char *shaderSource );
-        static void log( const unsigned int *ref, int type );
+        int init();
+        int link();
+        static int compile( unsigned int *shader, int type, const char *shaderSource );
+
+        static int logShader(const unsigned int *shader, int type);
+        static int logProgram(const unsigned int *program);
+        static void logInit(int status);
     public:
         Shader( const char *name );
 
