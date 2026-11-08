@@ -1,3 +1,6 @@
+#include <iostream>
+#include <ostream>
+
 #include "Window.h"
 #include "Shader.h"
 
@@ -12,6 +15,9 @@ int main() {
     {
         const Engine::Window window{ "C++ GLFW Window", 640, 480 };
         const Engine::Shader shader{ "a" };
+        const File file{ "a", FileType::shader, FileExtension::vert };
+
+        std::cout << file.read().c_str() << std::endl;
 
         while ( !window.shouldClose() ) {
             window.processInput();

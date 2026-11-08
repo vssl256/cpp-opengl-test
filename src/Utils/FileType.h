@@ -2,7 +2,7 @@
 
 namespace Utils {
     enum class FileType {
-        shader,
-        texture
+        shader = 0,
+        texture = 1
     };
 }
