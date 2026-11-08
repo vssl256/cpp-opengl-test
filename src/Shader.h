@@ -1,32 +1,26 @@
 #pragma once
 
+#include "Utils/File.h"
+
 namespace Engine {
     class Shader {
-        const char *name_;
+        std::string name_;
         unsigned int vertexShader_{};
         unsigned int fragmentShader_{};
         unsigned int shaderProgram_{};
-        const char *vertexShaderSource{"#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0"};
-        const char *fragmentShaderSource{"#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\n\0"};
+        const char *shaderPath_{ "assets/shaders/" };
+        std::string vertexShaderSource;
+        std::string fragmentShaderSource;
         int init();
+        [[nodiscard]] std::string readShader( const std::string& ext ) const;
         int link();
+        void deleteShaders() const;
         static int compile( unsigned int *shader, int type, const char *shaderSource );
-
         static int logShader(const unsigned int *shader, int type);
         static int logProgram(const unsigned int *program);
         static void logInit(int status);
     public:
-        Shader( const char *name );
+        Shader( std::string name );
 
         ~Shader();
         Shader( const Shader& ) = delete;

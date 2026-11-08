@@ -1,13 +1,15 @@
 #include "Shader.h"
+#include "Utils/File.h"
 
 #include <iostream>
 #include <ostream>
+#include <utility>
 
 #include "glad/glad.h"
 
 namespace Engine {
-    Shader::Shader( const char *name )
-    : name_( name ) {
+    Shader::Shader( std::string name )
+    : name_( std::move( name ) ) {
         logInit( init() );
     }
 
@@ -16,13 +18,24 @@ namespace Engine {
     }
 
     int Shader::init() {
-        const int vsStatus = compile( &vertexShader_, GL_VERTEX_SHADER, vertexShaderSource );
-        const int fsStatus = compile( &fragmentShader_, GL_FRAGMENT_SHADER, fragmentShaderSource );
-        if ( vsStatus + fsStatus != 0 ) return 1;
+        vertexShaderSource = readShader( ".vert" );
+        fragmentShaderSource = readShader( ".frag" );
+
+        const int vsStatus = compile( &vertexShader_, GL_VERTEX_SHADER, vertexShaderSource.c_str() );
+        const int fsStatus = compile( &fragmentShader_, GL_FRAGMENT_SHADER, fragmentShaderSource.c_str() );
+        if ( vsStatus + fsStatus != 0 ) {
+            deleteShaders();
+            return 1;
+        }
         if ( link() != 0 ) return -1;
 
         glUseProgram( shaderProgram_ );
         return 0;
+    }
+
+    std::string Shader::readShader( const std::string& ext ) const {
+        const Utils::File shaderFile{ shaderPath_, ( name_ + ext ).c_str() };
+        return shaderFile.read();
     }
 
     int Shader::link() {
@@ -31,11 +44,17 @@ namespace Engine {
         glAttachShader( shaderProgram_, fragmentShader_ );
         glLinkProgram( shaderProgram_ );
 
-        glDeleteShader( vertexShader_ );
-        glDeleteShader( fragmentShader_ );
+        deleteShaders();
 
         if ( logProgram( &shaderProgram_ ) != 0 ) return -1;
         return 0;
+    }
+
+    void Shader::deleteShaders() const {
+        glDetachShader( shaderProgram_, vertexShader_ );
+        glDetachShader( shaderProgram_, fragmentShader_ );
+        glDeleteShader( vertexShader_ );
+        glDeleteShader( fragmentShader_ );
     }
 
     int Shader::compile( unsigned int *shader, const int type, const char *shaderSource ) {
@@ -66,6 +85,7 @@ namespace Engine {
         glGetShaderInfoLog( *shader, 512, nullptr, infoLog );
         const std::string_view shaderType{ type == GL_VERTEX_SHADER ? "Vertex" : "Fragment" };
         std::cerr << shaderType << " shader compilation failed: " << infoLog << std::endl;
+
         return 1;
     }
 

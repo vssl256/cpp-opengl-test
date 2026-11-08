@@ -1,8 +1,7 @@
 #pragma once
 
 #include <string>
-#include "FileExtension.h"
-
+#include <filesystem>
 
 namespace Utils {
     enum class FileType;
@@ -10,14 +9,9 @@ namespace Utils {
 
 namespace Utils {
     class File {
-        const char *name_;
-        FileType type_;
-        FileExtension extension_;
-        std::string path_;
-        std::string typeName[2]{ "shaders", "textures" };
-        std::string extensionName[2]{ "vert", "frag" };
+        std::filesystem::path path_;
     public:
-        File( const char *name, FileType type, FileExtension extension );
+        File( std::filesystem::path path, const char *name );
 
         [[nodiscard]] std::string read() const;
     };
